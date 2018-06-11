@@ -1,0 +1,30 @@
+<h2 mat-dialog-title>
+  New client
+</h2>
+<mat-dialog-content>
+  <form class="form-container" [formGroup]="clientForm">
+    <mat-form-field color="accent">
+      <input matInput formControlName="firstName" placeholder="First name" />
+    </mat-form-field>
+    <mat-error *ngIf="clientForm.controls.firstName.invalid && clientForm.controls.firstName.touched">
+      Name is required
+    </mat-error>
+    <mat-form-field color="accent">
+      <input matInput formControlName="lastName" placeholder="Last name" />
+    </mat-form-field>
+    <mat-error *ngIf="clientForm.controls.lastName.invalid && clientForm.controls.lastName.touched">
+      Last name is required
+    </mat-error>
+    <mat-form-field color="accent">
+      <input matInput formControlName="email" type="email" placeholder="Email" />
+    </mat-form-field>
+    <mat-error *ngIf="clientForm.controls.email.invalid && clientForm.controls.email.touched">
+      Email is required
+    </mat-error>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button [mat-dialog-close]="clientForm.value">Save</button>
+  <!-- The mat-dialog-close directive optionally accepts a value as a result for the dialog. -->
+  <button mat-button (click)="onNoClick()">Cancel</button>
+</mat-dialog-actions>

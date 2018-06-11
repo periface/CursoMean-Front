@@ -17,7 +17,7 @@ import {
   MatDialogModule,
   MatPaginatorModule,
   MatProgressSpinnerModule,
-  MatSortModule
+  MatSortModule,
 } from '@angular/material';
 
 @NgModule({
