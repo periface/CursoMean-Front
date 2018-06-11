@@ -1,20 +1,29 @@
+import { startWith, switchMap, map, catchError } from 'rxjs/internal/operators';
 import { remove } from 'lodash';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { InvoiceService } from '../../services/invoice.service';
 import { Invoice } from '../../models/invoice';
-import { MatSnackBar, MatPaginator } from '@angular/material';
+import {
+  MatSnackBar,
+  MatPaginator,
+  MatSort,
+  MatTableDataSource
+} from '@angular/material';
 import { Router } from '@angular/router';
+import { merge } from 'rxjs';
+import { Observable } from 'rxjs';
 @Component({
   selector: 'app-invoice-listing',
   templateUrl: './invoice-listing.component.html',
   styleUrls: ['./invoice-listing.component.scss']
 })
-export class InvoiceListingComponent implements OnInit {
+export class InvoiceListingComponent implements OnInit, AfterViewInit {
   resultLength = 0;
   displayedColumns = ['item', 'date', 'due', 'qty', 'rate', 'tax', 'action'];
-  dataSource: Invoice[] = [];
-  loading = false;
+  dataSource: MatTableDataSource<Invoice> = new MatTableDataSource<Invoice>();
+  loading = true;
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
   constructor(
     private invoiceService: InvoiceService,
     private snackBar: MatSnackBar,
@@ -23,58 +32,74 @@ export class InvoiceListingComponent implements OnInit {
   saveBtnHandler() {
     this.router.navigate(['dashboard', 'invoices', 'new']);
   }
-  ngOnInit() {
-
-    this.paginator.page.subscribe(data => {
-      this.loading = true;
-      this.invoiceService
-        .getInvoices({ page: ++data.pageIndex, perPage: data.pageSize })
-        .subscribe(
-          result => {
-            this.loading = false;
-            this.dataSource = result.docs;
-            this.resultLength = result.total;
-          },
-          err => {
-            this.snackBar.open(
-              'Ocurrio un error, no se pudieron obtener los datos...',
-              'Cerrar',
-              {
-                duration: 3000
-              }
-            );
-          }
-        );
-    });
-
-    this.populateInvoices();
-  }
-  private populateInvoices() {
+  ngOnInit() {}
+  filterValue(value: string) {
     this.loading = true;
-    this.invoiceService.getInvoices({ page: 1, perPage: 10 }).subscribe(
-      data => {
-        this.dataSource = data.docs;
-        this.resultLength = data.total;
+    this.paginator.pageIndex = 0;
+    value = value.trim();
+    this.invoiceService
+      .getInvoices({
+        page: this.paginator.pageIndex,
+        perPage: this.paginator.pageSize,
+        sortField: this.sort.active,
+        sortDir: this.sort.direction,
+        filter: value
+      })
+      .subscribe(
+        data => {
+          this.dataSource.data = data.docs;
+          this.resultLength = data.total;
+          this.loading = false;
+        },
+        error => {
+          this.snackBar.open(
+            'Ocurrio un error, no se pudieron obtener los datos...',
+            'Cerrar',
+            {
+              duration: 3000
+            }
+          );
+        }
+      );
+  }
+  ngAfterViewInit() {
+    merge(this.paginator.page, this.sort.sortChange)
+      .pipe(
+        startWith({}),
+        switchMap(() => {
+          return this.invoiceService.getInvoices({
+            page: this.paginator.pageIndex,
+            perPage: this.paginator.pageSize,
+            sortField: this.sort.active,
+            sortDir: this.sort.direction
+          });
+        }),
+        map(data => {
+          this.resultLength = data.total;
+          return data.docs;
+        }),
+        catchError(() => {
+          this.snackBar.open(
+            'Ocurrio un error, no se pudieron obtener los datos...',
+            'Cerrar',
+            {
+              duration: 3000
+            }
+          );
+          return Observable.throw({});
+        })
+      )
+      .subscribe(data => {
         this.loading = false;
-      },
-      err => {
-        this.loading = false;
-        this.snackBar.open(
-          'Ocurrio un error, no se pudieron obtener los datos...',
-          'Cerrar',
-          {
-            duration: 3000
-          }
-        );
-      }
-    );
+        this.dataSource.data = data;
+      });
   }
   delete(id) {
     this.invoiceService.deleteInvoice(id).subscribe(invoice => {
-      remove(this.dataSource, item => {
+      remove(this.dataSource.data, item => {
         return item._id === invoice._id;
       });
-      this.dataSource = [...this.dataSource];
+      this.dataSource.data = [...this.dataSource.data];
       this.snackBar.open(`Invoice ${invoice.item} deleted...`, 'Close', {
         duration: 3000
       });

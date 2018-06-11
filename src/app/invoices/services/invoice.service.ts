@@ -11,11 +11,22 @@ export class InvoiceService {
 
   getInvoices({
     page = 1,
-    perPage = 10
+    perPage = 10,
+    sortField,
+    sortDir,
+    filter= ''
   }): Observable<InvoicesPaginationResponse> {
-    return this.httpClient.get<InvoicesPaginationResponse>(
-      `${BASE_URL}/invoices?page=${page}&perPage=${perPage}`
-    );
+    let queryString = `${BASE_URL}/invoices?page=${page +
+      1}&perPage=${perPage}`;
+    if (sortField && sortDir) {
+      queryString = `${queryString}&sortField=${sortField}&sortDir=${sortDir}`;
+    }
+
+    if (filter) {
+      queryString = `${queryString}&filter=${filter}`;
+    }
+
+    return this.httpClient.get<InvoicesPaginationResponse>(queryString);
   }
   createInvoice(body: Invoice): Observable<Invoice> {
     return this.httpClient.post<Invoice>(`${BASE_URL}/invoices`, body);
