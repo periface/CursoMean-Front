@@ -1,6 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { Client } from '../../models/client';
 
 @Component({
   selector: 'app-client-form',
@@ -9,6 +10,8 @@ import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 })
 export class ClientFormComponent implements OnInit {
   clientForm: FormGroup;
+  client: Client;
+  dialogTitle = 'New client';
   constructor(
     private dialogRef: MatDialogRef<ClientFormComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -30,5 +33,10 @@ export class ClientFormComponent implements OnInit {
       lastName: ['', Validators.required],
       email: ['', Validators.required]
     });
+    if (this.data) {
+      this.client = this.data;
+      this.clientForm.patchValue(this.client);
+      this.dialogTitle = `${this.client.firstName}`;
+    }
   }
 }

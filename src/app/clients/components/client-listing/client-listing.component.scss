@@ -4,10 +4,25 @@
   color: rgb(255, 255, 255);
   background-color: #ff4081;
 }
+
 .mat-table {
   overflow: auto;
   max-height: 500px;
 }
+
+.loading-shade {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 56px;
+  right: 0;
+  background: rgba(0, 0, 0, 0.15);
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .table-container {
   display: flex;
   flex-direction: column;
@@ -22,6 +37,7 @@
   overflow: auto;
   width: 100%;
 }
+
 table {
   width: 100%;
 }

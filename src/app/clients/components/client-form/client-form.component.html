@@ -1,5 +1,5 @@
 <h2 mat-dialog-title>
-  New client
+  {{dialogTitle}}
 </h2>
 <mat-dialog-content>
   <form class="form-container" [formGroup]="clientForm">
@@ -24,7 +24,7 @@
   </form>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-button [mat-dialog-close]="clientForm.value">Save</button>
+  <button mat-button [disabled]="!clientForm.valid" [mat-dialog-close]="clientForm.value">Save</button>
   <!-- The mat-dialog-close directive optionally accepts a value as a result for the dialog. -->
   <button mat-button (click)="onNoClick()">Cancel</button>
 </mat-dialog-actions>

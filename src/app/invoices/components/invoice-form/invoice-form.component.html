@@ -8,6 +8,16 @@
       </mat-error>
     </mat-form-field>
     <mat-form-field color="accent">
+      <mat-select placeholder="Client" formControlName="client">
+        <mat-option *ngFor="let client of clients" [value]="client._id">
+          {{ client.firstName }} {{ client.lastName }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="invoiceForm.controls.client.invalid && invoiceForm.controls.client.touched">
+        Client is required
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field color="accent">
       <input matInput [matDatepicker]="date" formControlName="date" placeholder="Chose a date">
       <mat-datepicker-toggle matSuffix [for]="date"></mat-datepicker-toggle>
       <mat-datepicker #date></mat-datepicker>
