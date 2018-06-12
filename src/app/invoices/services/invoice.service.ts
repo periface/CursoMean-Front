@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Invoice, InvoicesPaginationResponse } from '../models/invoice';
+import { JwtService } from '../../core/services/jwt.service';
 const BASE_URL = 'http://localhost:3000/api';
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,7 @@ export class InvoiceService {
     perPage = 10,
     sortField,
     sortDir,
-    filter= ''
+    filter = ''
   }): Observable<InvoicesPaginationResponse> {
     let queryString = `${BASE_URL}/invoices?page=${page +
       1}&perPage=${perPage}`;

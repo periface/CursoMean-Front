@@ -21,10 +21,16 @@ export class ClientListingComponent implements OnInit, AfterViewInit {
   dataSource: MatTableDataSource<Client> = new MatTableDataSource<Client>();
   ngOnInit() {}
   ngAfterViewInit(): void {
-    this.clientService.getClients().subscribe(data => {
-      this.loading = false;
-      this.dataSource.data = data;
-    });
+    this.clientService.getClients().subscribe(
+      data => {
+        this.loading = false;
+        this.dataSource.data = data;
+      },
+      err => {
+        this.loading = false;
+        console.log(err);
+      }
+    );
   }
   saveBtnHandler() {
     this.openDialog();
