@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { User } from '../models/user';
 import { Observable } from 'rxjs';
 import { LoginResponse } from '../models/loginResponse';
+import { SignupResponse } from '../models/signupResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -16,8 +17,8 @@ export class AuthService {
       body
     );
   }
-  signUp(body: User): Observable<User> {
-    return this.httpClient.post<User>(
+  signUp(body: User): Observable<SignupResponse> {
+    return this.httpClient.post<SignupResponse>(
       `${environment.api_url}/users/signup`,
       body
     );

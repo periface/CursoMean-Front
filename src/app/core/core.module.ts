@@ -5,10 +5,11 @@ import { AuthService } from './services/auth.service';
 import { JwtService } from './services/jwt.service';
 import { HttpInterceptorHandler } from '@angular/common/http/src/interceptor';
 import { HttpInterceptorService } from './services/http-interceptor.service';
+import { AuthGuardService } from './services/auth-guard.service';
 
 @NgModule({
   imports: [CommonModule, HttpClientModule],
   declarations: [],
-  providers: [AuthService, JwtService, HttpInterceptorService]
+  providers: [AuthService, JwtService, HttpInterceptorService, AuthGuardService]
 })
 export class CoreModule {}

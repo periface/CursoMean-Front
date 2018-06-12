@@ -1,4 +1,6 @@
 import { Component, OnInit, NgZone } from '@angular/core';
+import { Router } from '@angular/router';
+import { JwtService } from '../../../core/services/jwt.service';
 const MAX_WIDTH_BREAKPOINT = 720;
 @Component({
   selector: 'app-side-nav',
@@ -20,7 +22,11 @@ export class SideNavComponent implements OnInit {
       name: 'Clients'
     }
   ];
-  constructor(zone: NgZone) {
+  constructor(
+    zone: NgZone,
+    private router: Router,
+    private jwtService: JwtService
+  ) {
     this.mediaMatcher.addListener(mql => {
       zone.run(() => {
         this.mediaMatcher = mql;
@@ -33,5 +39,9 @@ export class SideNavComponent implements OnInit {
   ngOnInit() {}
   isScreenSmall(): boolean {
     return this.mediaMatcher.matches;
+  }
+  logOut() {
+    this.jwtService.destroyToken();
+    this.router.navigate(['login']);
   }
 }

@@ -10,7 +10,7 @@ import {
   MatTableDataSource
 } from '@angular/material';
 import { Router } from '@angular/router';
-import {of, merge} from 'rxjs';
+import { of, merge } from 'rxjs';
 import { Observable } from 'rxjs';
 @Component({
   selector: 'app-invoice-listing',
@@ -63,12 +63,11 @@ export class InvoiceListingComponent implements OnInit, AfterViewInit {
       );
   }
   ngAfterViewInit() {
-    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+    this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
     merge(this.paginator.page, this.sort.sortChange)
       .pipe(
         startWith({}),
         switchMap(() => {
-          this.loading = true;
           return this.invoiceService.getInvoices({
             page: this.paginator.pageIndex,
             perPage: this.paginator.pageSize,
@@ -77,11 +76,20 @@ export class InvoiceListingComponent implements OnInit, AfterViewInit {
           });
         }),
         map(data => {
-          this.loading = false;
           this.resultLength = data.total;
           return data.docs;
         }),
         catchError(err => {
+          return [];
+        })
+      )
+      .subscribe(
+        data => {
+          console.log(data);
+          this.loading = false;
+          this.dataSource.data = data;
+        },
+        err => {
           this.loading = false;
           this.snackBar.open(
             'Ocurrio un error, no se pudieron obtener los datos...',
@@ -91,13 +99,8 @@ export class InvoiceListingComponent implements OnInit, AfterViewInit {
             }
           );
           console.log(err);
-          return [];
-        })
-      )
-      .subscribe(data => {
-        this.loading = false;
-        this.dataSource.data = data;
-      });
+        }
+      );
   }
   delete(id) {
     this.invoiceService.deleteInvoice(id).subscribe(invoice => {

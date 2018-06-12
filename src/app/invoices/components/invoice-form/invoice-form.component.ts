@@ -16,6 +16,7 @@ export class InvoiceFormComponent implements OnInit {
   invoiceForm: FormGroup;
   private invoice: Invoice;
   clients: Client[] = [];
+  title = 'Create Invoice';
   constructor(
     private formBuilder: FormBuilder,
     private invoiceService: InvoiceService,
@@ -38,15 +39,21 @@ export class InvoiceFormComponent implements OnInit {
   private setInvoiceToForm() {
     this.activatedRoute.params.subscribe(params => {
       if (params['id']) {
-        this.invoiceService.findById(params['id']).subscribe(
-          invoice => {
-            this.invoice = invoice;
-            this.invoiceForm.patchValue(this.invoice);
-          },
-          error => {
-            this.errorHandler(error, 'Error finding invoice');
-          }
-        );
+        this.title = 'Edit Invoice';
+        // this.invoiceService.findById(params['id']).subscribe(
+        //   invoice => {
+        //     this.invoice = invoice;
+        //     this.invoiceForm.patchValue(this.invoice);
+        //   },
+        //   error => {
+        //     this.errorHandler(error, 'Error finding invoice');
+        //   }
+        // );
+        this.activatedRoute.data.subscribe((data: { invoice: Invoice }) => {
+
+          this.invoice = data.invoice;
+          this.invoiceForm.patchValue(this.invoice);
+        });
       }
     });
   }

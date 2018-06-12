@@ -35,20 +35,36 @@ export class AuthComponent implements OnInit {
     this.router.navigate(['/login']);
   }
   onSubmit() {
-    this.authService.login(this.authForm.value).subscribe(
-      response => {
-        if (!response.success) {
-          alert('Usuario/Contraseña no validos');
-        } else {
-          this.jwtService.setToken(response.token);
-          this.router.navigate(['dashboard']);
+    if (this.isSignUp) {
+      this.authService.signUp(this.authForm.value).subscribe(
+        data => {
+          if (data.success) {
+            this.authService.login(this.authForm.value).subscribe(response => {
+              this.jwtService.setToken(response.token);
+              this.router.navigate(['dashboard']);
+            });
+          }
+        },
+        err => {
+          alert(err);
         }
-      },
-      data => {
-        alert('Usuario/Contraseña no validos');
-        console.log(data.error);
-      }
-    );
+      );
+    } else {
+      this.authService.login(this.authForm.value).subscribe(
+        response => {
+          if (!response.success) {
+            alert('Usuario/Contraseña no validos');
+          } else {
+            this.jwtService.setToken(response.token);
+            this.router.navigate(['dashboard']);
+          }
+        },
+        data => {
+          alert('Usuario/Contraseña no validos');
+          console.log(data.error);
+        }
+      );
+    }
   }
   private initForm() {
     this.authForm = this.formBuilder.group({
