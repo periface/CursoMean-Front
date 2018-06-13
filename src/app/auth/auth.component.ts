@@ -66,6 +66,11 @@ export class AuthComponent implements OnInit {
       );
     }
   }
+  googleAuthHandler() {
+    this.authService.googleAuth().subscribe(data => {
+      console.log(data);
+    }, error => console.log(error));
+  }
   private initForm() {
     this.authForm = this.formBuilder.group({
       email: ['', Validators.required],

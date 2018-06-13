@@ -1,6 +1,6 @@
 import { environment } from './../../../environments/environment';
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { User } from '../models/user';
 import { Observable } from 'rxjs';
 import { LoginResponse } from '../models/loginResponse';
@@ -22,5 +22,18 @@ export class AuthService {
       `${environment.api_url}/users/signup`,
       body
     );
+  }
+  googleAuth(): Observable<LoginResponse> {
+    return this.httpClient.get<LoginResponse>(`${environment.api_url}/auth/google`);
+  }
+  isAuthenticated(token: string): Observable<boolean> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': `bearer ${token}`
+      })
+    };
+    return this.httpClient.get<boolean>(`${environment.api_url}/auth/authenticate`, httpOptions);
+
   }
 }

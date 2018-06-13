@@ -19,9 +19,14 @@
             </mat-error>
           </mat-form-field>
           <div>
-            <button mat-raised-button [disabled]="!authForm.valid" type="submit" color="accent">
+            <button mat-raised-button [disabled]="!authForm.valid" class="btn btn-social btn-block" type="submit" color="accent">
               {{title}}
             </button>
+            <!-- <button mat-raised-button type="button" (click)="googleAuthHandler()">
+              Google
+            </button> -->
+            <a href="http://localhost:3000/api/auth/google" class="btn btn-social btn-block btn-google" mat-button><i class="fa fa-google"></i> Google</a>
+            <a href="http://148.237.42.44:3000/api/auth/twitter" class="btn btn-social btn-block btn-twitter" mat-button><i class="fa fa-twitter"></i> Twitter</a>
           </div>
         </form>
 
