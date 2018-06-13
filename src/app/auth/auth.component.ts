@@ -3,6 +3,7 @@ import { AuthService } from './../core/services/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { JwtService } from '../core/services/jwt.service';
+import { User } from '../core/models/user';
 
 @Component({
   selector: 'app-auth',
@@ -35,11 +36,14 @@ export class AuthComponent implements OnInit {
     this.router.navigate(['/login']);
   }
   onSubmit() {
-    if (this.isSignUp) {
+    console.log(this.isSignUp);
+    if (this.isSignUp === true) {
       this.authService.signUp(this.authForm.value).subscribe(
         data => {
           if (data.success) {
-            this.authService.login(this.authForm.value).subscribe(response => {
+            const {email, password} = this.authForm.value;
+            const user: User = {email, password};
+            this.authService.login(user).subscribe(response => {
               this.jwtService.setToken(response.token);
               this.router.navigate(['dashboard']);
             });
@@ -50,7 +54,9 @@ export class AuthComponent implements OnInit {
         }
       );
     } else {
-      this.authService.login(this.authForm.value).subscribe(
+      const {email, password} = this.authForm.value;
+      const user: User = {email, password};
+      this.authService.login(user).subscribe(
         response => {
           if (!response.success) {
             alert('Usuario/Contraseña no validos');
@@ -74,7 +80,8 @@ export class AuthComponent implements OnInit {
   private initForm() {
     this.authForm = this.formBuilder.group({
       email: ['', Validators.required],
-      password: ['', Validators.required]
+      password: ['', Validators.required],
+      name: ['']
     });
   }
 }

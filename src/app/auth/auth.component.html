@@ -6,6 +6,12 @@
       </mat-card-title>
       <mat-card-content>
         <form class="form-container" [formGroup]="authForm" novalidate (ngSubmit)="onSubmit()">
+          <mat-form-field color="accent" *ngIf="isSignUp" >
+            <input matInput placeholder="Name" type="text" formControlName="name">
+            <mat-error *ngIf="authForm.controls.name.invalid && authForm.controls.name.touched">
+              Name is required
+            </mat-error>
+          </mat-form-field>
           <mat-form-field color="accent">
             <input matInput placeholder="Email" type="email" formControlName="email">
             <mat-error *ngIf="authForm.controls.email.invalid && authForm.controls.email.touched">
