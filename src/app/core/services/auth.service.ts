@@ -1,3 +1,4 @@
+import { LogoutResponse } from './../models/logoutResponse';
 import { environment } from './../../../environments/environment';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -5,7 +6,6 @@ import { User } from '../models/user';
 import { Observable } from 'rxjs';
 import { LoginResponse } from '../models/loginResponse';
 import { SignupResponse } from '../models/signupResponse';
-
 @Injectable({
   providedIn: 'root'
 })
@@ -35,5 +35,8 @@ export class AuthService {
     };
     return this.httpClient.get<boolean>(`${environment.api_url}/auth/authenticate`, httpOptions);
 
+  }
+  logout(): Observable<LogoutResponse> {
+    return this.httpClient.get<LogoutResponse>(`${environment.api_url}/auth/logout`);
   }
 }

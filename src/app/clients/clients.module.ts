@@ -1,4 +1,3 @@
-import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ClientListingComponent } from './components/client-listing/client-listing.component';
@@ -12,7 +11,6 @@ import { ClientFormComponent } from './components/client-form/client-form.compon
     CommonModule,
     MaterialModule,
     FormsModule,
-    HttpClientModule,
     ReactiveFormsModule
   ],
   declarations: [ClientListingComponent, ClientFormComponent],

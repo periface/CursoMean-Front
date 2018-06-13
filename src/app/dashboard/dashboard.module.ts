@@ -9,8 +9,6 @@ import { SideNavComponent } from './components/side-nav/side-nav.component';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { MaterialModule } from '../shared/material.module';
 import { DashboardRoutingModule } from './dashboard-routing.module';
-import { HttpInterceptorService } from '../core/services/http-interceptor.service';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
 @NgModule({
   imports: [
@@ -27,11 +25,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
     DashboardComponent
   ],
   providers: [
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: HttpInterceptorService,
-      multi: true
-    }
+
   ],
   exports: []
 })

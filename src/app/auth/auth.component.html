@@ -25,8 +25,8 @@
             <!-- <button mat-raised-button type="button" (click)="googleAuthHandler()">
               Google
             </button> -->
-            <a href="http://localhost:3000/api/auth/google" class="btn btn-social btn-block btn-google" mat-button><i class="fa fa-google"></i> Google</a>
-            <a href="http://148.237.42.44:3000/api/auth/twitter" class="btn btn-social btn-block btn-twitter" mat-button><i class="fa fa-twitter"></i> Twitter</a>
+            <a *ngIf="!isSignUp" href="http://localhost:3000/api/auth/google" class="btn btn-social btn-block btn-google" mat-button><i class="fa fa-google"></i> Google</a>
+            <a *ngIf="!isSignUp" href="http://148.237.42.44:3000/api/auth/twitter" class="btn btn-social btn-block btn-twitter" mat-button><i class="fa fa-twitter"></i> Twitter</a>
           </div>
         </form>
 
@@ -35,7 +35,7 @@
         <p>
           Don´t have an account?
         </p>
-        <button (click)="goToSignUp()" mat-raised-button color="accent">
+        <button class="btn btn-social btn-block" (click)="goToSignUp()" mat-raised-button color="accent">
           Sign up
         </button>
       </div>
@@ -43,7 +43,7 @@
         <p>
           You already have an account?
         </p>
-        <button (click)="goToLogin()" mat-raised-button color="accent">
+        <button class="btn btn-social btn-block" (click)="goToLogin()" mat-raised-button color="accent">
           Log in
         </button>
       </div>

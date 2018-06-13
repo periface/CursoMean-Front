@@ -34,6 +34,7 @@ export class AuthGuardService implements CanActivate, CanActivateChild {
         return this.authService.isAuthenticated(jwtToken).pipe(map(authenticated => {
             if (authenticated === true) {
               this.jwtService.setToken(jwtToken);
+              this.router.navigate(['/dashboard']);
               return true;
             }
             this.router.navigate(['/login']);
